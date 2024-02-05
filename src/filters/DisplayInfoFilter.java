@@ -1,21 +1,19 @@
-package Filters;
+package filters;
 
-import Interfaces.PixelFilter;
+import interfaces.PixelFilter;
 import core.DImage;
 
 import java.sql.SQLOutput;
 
 public class DisplayInfoFilter implements PixelFilter {
     public DisplayInfoFilter() {
-        System.out.println("Filter running...");
+        System.out.println("filter running...");
     }
 
     @Override
     public DImage processImage(DImage img) {
         short[][] grid = img.getBWPixelGrid();
-
-        System.out.println("Image is " + grid.length + " by "+ grid[0].length);
-
+        System.out.println("image is " + grid.length + " by "+ grid[0].length);
         int blackCount = 0;
         int whiteCount = 0;
         for (int r = 0; r < grid.length; r++) {
@@ -24,11 +22,7 @@ public class DisplayInfoFilter implements PixelFilter {
                 if (grid[r][c] > 240) whiteCount++;
             }
         }
-
         System.out.println(blackCount + " nearly black pixels and " + whiteCount + " nearly white pixels");
-        System.out.println("----------------------------------------");
-        System.out.println("If you want, you could output information to a file instead of printing it.");
-
         return img;
     }
 }

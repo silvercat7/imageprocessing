@@ -1,10 +1,10 @@
-package Filters;
+package filters;
 
-import Interfaces.PixelFilter;
+import interfaces.PixelFilter;
 import core.DImage;
 
 public class FixedThresholdFilter implements PixelFilter {
-    private int threshold;
+    private final int threshold;
 
     public FixedThresholdFilter() {
         threshold = 127;
@@ -13,7 +13,6 @@ public class FixedThresholdFilter implements PixelFilter {
     @Override
     public DImage processImage(DImage img) {
         short[][] grid = img.getBWPixelGrid();
-
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[r].length; c++) {
                 if (grid[r][c] > threshold) {
@@ -23,9 +22,7 @@ public class FixedThresholdFilter implements PixelFilter {
                 }
             }
         }
-
         img.setPixels(grid);
         return img;
     }
 }
-

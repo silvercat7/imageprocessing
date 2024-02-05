@@ -1,8 +1,8 @@
 package core;
 
-import Interfaces.Drawable;
-import Interfaces.Interactive;
-import Interfaces.PixelFilter;
+import interfaces.Drawable;
+import interfaces.Interactive;
+import interfaces.PixelFilter;
 import com.github.sarxos.webcam.Webcam;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -55,7 +55,7 @@ public class DisplayWindow extends PApplet {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error setting dimensions. Using defaults of 900x800");
+            System.err.println("error setting dimensions: using defaults of 900 by 800");
         }
 
         size(initWidth, initHeight);
@@ -77,7 +77,7 @@ public class DisplayWindow extends PApplet {
             }
         }
         if (sourcePath == null) {
-            System.err.println("malformed image source path.  Format \"filepath:<the file path>\"");
+            System.err.println("malformed image source path:  format \"filepath:<the file path>\"");
             displayVideoSourceChoiceDialog();
             return;
         }
@@ -91,11 +91,11 @@ public class DisplayWindow extends PApplet {
     }
 
     private void displayVideoSourceChoiceDialog() {
-        Object[] options = {"Load image from disk",
-                "Use a webcam"};
+        Object[] options = {"load image from disk",
+                "use a webcam"};
         this.source = JOptionPane.showOptionDialog(null,
-                "What source would you like to use?",
-                "Source",
+                "what source would you like to use?",
+                "source",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -134,23 +134,23 @@ public class DisplayWindow extends PApplet {
 
     public void setup() {
         if (source == VIDEO && movie == null) {
-            System.err.println("No file loaded, switching to webcam as video source");
+            System.err.println("no file loaded, switching to webcam as video source");
             source = WEBCAM;
         } else if (source != WEBCAM && movie != null) {
             movie.play();
         }
 
         if (source == IMAGE && inputImage == null) {
-            System.err.println("No file loaded, switching to webcam as video source");
+            System.err.println("no file loaded, switching to webcam as video source");
             source = WEBCAM;
         }
 
         if (source == WEBCAM && webcam == null) {
-            System.out.println("Loading webcam...");
+            System.out.println("loading webcam...");
             webcam = Webcam.getDefault();
 
             Dimension[] views = webcam.getViewSizes();
-            webcam.setViewSize(views[views.length-1]);  // set view size to largest supported
+            webcam.setViewSize(views[views.length-1]);  // set view size to the largest supported
 
             this.displayHeight = (int)(webcam.getViewSize().getHeight());
             this.displayWidth = (int)(webcam.getViewSize().getWidth());
@@ -200,13 +200,13 @@ public class DisplayWindow extends PApplet {
         text(mousePositionString(currentDisplayFrame) + " " + colorString, 10, height - 22);
 
         if (filter == null) {
-            text("Press 'f' to load a filter", 350, height - 22);
+            text("press 'f' to load a filter", 350, height - 22);
         } else if (!currentlyViewingFilteredImage) {
-            text("Press 's' to show filtered image", 350, height - 22);
+            text("press 's' to show filtered image", 350, height - 22);
         }
 
         if (paused) {
-            text("Press 'p' to unpause", 620, height - 22);
+            text("press 'p' to unpause", 620, height - 22);
         }
 
         stroke(200);
@@ -320,15 +320,15 @@ public class DisplayWindow extends PApplet {
     }
 
     private PixelFilter loadNewFilter() {
-        String name = JOptionPane.showInputDialog("Type the name of your processImage class (without the .java)");
+        String name = JOptionPane.showInputDialog("type the name of your processImage class (without the .java)");
         PixelFilter f = null;
         try {
             Class c = Class.forName("Filters."+name);
             f = (PixelFilter) c.newInstance();
         } catch (Exception e) {
-            System.err.println("Something went wrong when instantiating your class!  (running its constructor). " +
-                    "Double-check you typed the name correctly.  Double-check you have a constructor that takes " +
-                    "no inputs!");
+            System.err.println("something went wrong when instantiating your class  (running its constructor)! " +
+                    "double check you typed the name correctly.  double check you have a constructor that takes " +
+                    "no inputs.");
             System.err.println(e.getMessage());
         }
 

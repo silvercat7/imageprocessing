@@ -27,8 +27,8 @@ public class PDFHelper {
             InputStream is = new FileInputStream(pathToPdf);
             pdf = PDDocument.load(is);
         } catch (IOException e) {
-            System.out.println("Couldn't load pdf");
-            System.out.println("DID YOU ADD THE ASSETS FOLDER TO YOUR CLASS PATH IN ECLIPSE?");
+            System.out.println("couldn't load pdf");
+            System.out.println("did you add the assets folder to your class path in eclipse?");
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public class PDFHelper {
                 img.updatePixels();
 
                 images.add(img);
-                System.out.println("Adding page " + images.size());
+                System.out.println("adding page " + images.size());
             } catch (IOException e) {
                 System.out.println("problem converting to image");
                 e.printStackTrace();
@@ -71,8 +71,8 @@ public class PDFHelper {
             InputStream is = new FileInputStream(pathtoPdf);
             pdf = PDDocument.load(is);
         } catch (IOException e) {
-            System.out.println("Couldn't load pdf");
-            System.out.println("DID YOU ADD THE ASSETS FOLDER TO YOUR CLASS PATH IN ECLIPSE?");
+            System.out.println("couldn't load pdf");
+            System.out.println("did you add the assets folder to your class path in eclipse?");
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -95,7 +95,7 @@ public class PDFHelper {
             }
 
         } else {
-            System.out.println("You requested page " + pageNum + " but there are only " + pages.size() + " pages");
+            System.out.println("you requested page " + pageNum + " but there are only " + pages.size() + " pages");
             return null;
         }
 

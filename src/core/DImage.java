@@ -479,7 +479,7 @@ public class DImage {
 
     public int getHeight() {
         if (this.img == null) {
-            System.err.println("No image defined for core.DImage");
+            System.err.println("no image defined for core.DImage");
             return 0;
         }
 
@@ -488,7 +488,7 @@ public class DImage {
 
     public int getWidth() {
         if (this.img == null) {
-            System.err.println("No image defined for core.DImage");
+            System.err.println("no image defined for core.DImage");
             return 0;
         }
 

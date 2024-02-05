@@ -1,6 +1,5 @@
 import FileIO.PDFHelper;
-import Filters.DisplayInfoFilter;
-import Interfaces.PixelFilter;
+import filters.DisplayInfoFilter;
 import core.DImage;
 import core.DisplayWindow;
 import processing.core.PImage;
@@ -15,11 +14,11 @@ public class FilterTest {
     }
 
     private static void RunTheFilter() {
-        System.out.println("Loading pdf....");
+        System.out.println("loading pdf....");
         PImage in = PDFHelper.getPageImage("assets/omrtest.pdf",1);
         DImage img = new DImage(in);       // you can make a DImage from a PImage
 
-        System.out.println("Running filter on page 1....");
+        System.out.println("running filter on page 1....");
         DisplayInfoFilter filter = new DisplayInfoFilter();
         filter.processImage(img);  // if you want, you can make a different method
                                    // that does the image processing an returns a DTO with
