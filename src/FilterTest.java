@@ -8,27 +8,24 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
-        // SaveAndDisplayExample();
-
-        RunTheFilter();
+        runFilter(1);
     }
 
-    private static void RunTheFilter() {
+    private static void runFilter(int page) {
         System.out.println("loading pdf....");
-        PImage in = PDFHelper.getPageImage("assets/omrtest.pdf",1);
-        DImage img = new DImage(in);       // you can make a DImage from a PImage
-
+        PImage p = PDFHelper.getPageImage("assets/OfficialOMRSampleDoc.pdf", 1);
+        DImage img = new DImage(p);
         System.out.println("running filter on page 1....");
         DisplayInfoFilter filter = new DisplayInfoFilter();
-        filter.processImage(img);  // if you want, you can make a different method
-                                   // that does the image processing an returns a DTO with
-                                   // the information you want
+        filter.processImage(img);
+        p = img.getPImage();
+        p.save(currentFolder + "assets/page" + page + ".png");
+        DisplayWindow.showFor("assets/page1.png");
     }
 
-    private static void SaveAndDisplayExample() {
-        PImage img = PDFHelper.getPageImage("assets/omrtest.pdf",1);
-        img.save(currentFolder + "assets/page1.png");
-
+    private static void saveAndDisplay(int page) {
+        PImage img = PDFHelper.getPageImage("assets/OfficialOMRSampleDoc.pdf", page);
+        img.save(currentFolder + "assets/page" + page + ".png");
         DisplayWindow.showFor("assets/page1.png");
     }
 }
