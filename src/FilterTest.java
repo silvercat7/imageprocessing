@@ -8,23 +8,27 @@ public class FilterTest {
     public static String currentFolder = System.getProperty("user.dir") + "/";
 
     public static void main(String[] args) {
-        runFilter(1);
+        runFilter();
     }
 
-    private static void runFilter(int page) {
+    private static void runFilter() {
         System.out.println("loading pdf....");
-        PImage p = PDFHelper.getPageImage("assets/OfficialOMRSampleDoc.pdf", 1);
-        DImage img = new DImage(p);
-        System.out.println("running filter on page 1....");
-        DisplayInfoFilter filter = new DisplayInfoFilter();
-        filter.processImage(img);
-        p = img.getPImage();
-        p.save(currentFolder + "assets/page" + page + ".png");
-        DisplayWindow.showFor("assets/page1.png");
+        for (int page = 1; page <= 6; page++) {
+            PImage p = PDFHelper.getPageImage("assets/OfficialOMRSampleDoc.pdf", page);
+            assert p != null;
+            DImage img = new DImage(p);
+            System.out.println("running filter on page " + page + "....");
+            DisplayInfoFilter filter = new DisplayInfoFilter();
+            filter.processImage(img);
+            p = img.getPImage();
+            p.save(currentFolder + "assets/page" + page + ".png");
+            DisplayWindow.showFor("assets/page" + page + ".png");
+        }
     }
 
     private static void saveAndDisplay(int page) {
         PImage img = PDFHelper.getPageImage("assets/OfficialOMRSampleDoc.pdf", page);
+        assert img != null;
         img.save(currentFolder + "assets/page" + page + ".png");
         DisplayWindow.showFor("assets/page1.png");
     }
