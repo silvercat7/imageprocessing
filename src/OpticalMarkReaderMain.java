@@ -2,33 +2,17 @@ import FileIO.PDFHelper;
 import core.DImage;
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class OpticalMarkReaderMain {
     public static void main(String[] args) {
         String pathToPdf = fileChooser();
         System.out.println("loading pdf at " + pathToPdf);
-//        parsePDF(pathToPdf);
-        DImage image = new DImage(Objects.requireNonNull(PDFHelper.getPageImage(pathToPdf, 1)));
-        short[][] page = image.getBWPixelGrid();
-//        char[] answers = parseQuestions(crop(page, 120, 270, 1320, 400));
-        char [][] answers = parsePage(page);
-        for (int col = 0; col < 2; col++) {
-            for (int i = 1; i <= 25; i++) {
-                char answer = answers[col][i - 1];
-                System.out.println("question " + (i + (col * 25)) + ": " + answer);
-            }
-        }
-//        for (int i = 0; i < 25; i++) {
-//            char answer = parseAnswer(crop(page, (i * 50) + 100, 100, (i * 50) + 150, 230));
-//            System.out.println("question " + (i + 1) + ": " + answer);
-//        }
+        parsePDF(pathToPdf);
         /*
-        Your code here to...
-        (1).  Load the pdf
-        (2).  Loop over its pages
-        (3).  Create a DImage from each page and process its pixels
-        (4).  Output 2 csv files
+        to do:
+        output csv files
          */
     }
 
@@ -43,29 +27,31 @@ public class OpticalMarkReaderMain {
     
     public static void parsePDF(String path) {
         for (int i = 1; i <= 6; i++) {
+            System.out.println("page " + i + ":");
             DImage page = new DImage(Objects.requireNonNull(PDFHelper.getPageImage(path, i)));
-            char[][] answers = parsePage(page.getBWPixelGrid());
+            ArrayList<ArrayList<Character>> answers = parsePage(page.getBWPixelGrid());
             int question = 1;
-            for (int col = 0; col < answers[0].length; col++) {
-                for (int row = 0; row < answers.length; row++) {
-                    System.out.println("question " + question + ": " + answers[row][col]);
+            for (int col = 0; col < answers.size(); col++) {
+                for (int row = 0; row < answers.get(col).size(); row++) {
+                    System.out.println("question " + question + ": " + answers.get(col).get(row));
                     question++;
                 }
             }
+            System.out.println("-------------------------");
         }
     }
 
-    public static char[][] parsePage(short[][] page) {
-        char[][] answers = new char[2][25];
-        answers[0] = parseQuestions(crop(page, 100, 100, 1350, 230));
-        answers[1] = parseQuestions(crop(page, 270, 125, 1520, 400));
+    public static ArrayList<ArrayList<Character>> parsePage(short[][] page) {
+        ArrayList<ArrayList<Character>> answers = new ArrayList<>();
+        answers.add(parseQuestions(crop(page, 100, 100, 1350, 230)));
+        answers.add(parseQuestions(crop(page, 120, 270, 1320, 400)));
         return answers;
     }
 
-    public static char[] parseQuestions(short[][] column) {
-        char[] answers = new char[25];
+    public static ArrayList<Character> parseQuestions(short[][] column) {
+        ArrayList<Character> answers = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            answers[i] = parseAnswer(crop(column, (i * 50), 0, (i * 50) + 50, column[0].length));
+            answers.add(parseAnswer(crop(column, (i * 50), 0, (i * 50) + 50, column[0].length)));
         }
         return answers;
     }
@@ -77,11 +63,11 @@ public class OpticalMarkReaderMain {
         for (int i = 0; i < 5; i++) {
             double total = 0;
             for (int row = 0; row < question.length; row++) {
-                for (int col = i * 20; col < (i * 20) + 20; col++) {
+                for (int col = i * 25; col < (i * 25) + 25; col++) {
                     total += question[row][col];
                 }
             }
-            double average = total / (20 * question.length);
+            double average = total / (25 * question.length);
             if (average > closestToWhite) {
                 closestToWhite = average;
             }
@@ -115,7 +101,7 @@ public class OpticalMarkReaderMain {
         short[][] cropped = new short[endRow - startRow][endCol - startCol];
         for (int row = 0; row < cropped.length && row + startRow < original.length; row++) {
             for (int col = 0; col < cropped[0].length; col++) {
-                cropped[row][col] = original[startRow + row][startCol + col];
+                cropped[row][col] = original[row + startRow][col + startCol];
             }
         }
         return cropped;

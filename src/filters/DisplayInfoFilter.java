@@ -10,7 +10,7 @@ public class DisplayInfoFilter implements PixelFilter {
 
     @Override
     public DImage processImage(DImage img) {
-        short[][] image = crop(img, 1000, 0, 1500, 550);
+        short[][] image = crop(img, 0, 0, 800, 550);
         int blackCount = 0;
         int whiteCount = 0;
         for (int row = 0; row < image.length; row++) {
