@@ -2,18 +2,29 @@ import FileIO.PDFHelper;
 import core.DImage;
 import javax.swing.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class OpticalMarkReaderMain {
     public static void main(String[] args) {
-        String pathToPdf = fileChooser();
-        System.out.println("loading pdf at " + pathToPdf);
-        parsePDF(pathToPdf);
-        /*
-        to do:
-        output csv files
-         */
+        outputResults();
+    }
+
+    public static void outputResults() {
+        ArrayList<ArrayList<ArrayList<Character>>> answers = parsePDF(fileChooser());
+        ArrayList<ArrayList<Character>> key = answers.get(0);
+        try {
+            PrintWriter results = new PrintWriter(new FileWriter("results.txt"));
+            for (int i = 1; i < 6; i++) {
+                results.println(createLine(i, scoreTest(answers.get(i), key)));
+            }
+            results.close();
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
     }
 
     private static String fileChooser() {
@@ -25,20 +36,13 @@ public class OpticalMarkReaderMain {
         return file.getAbsolutePath();
     }
     
-    public static void parsePDF(String path) {
+    public static ArrayList<ArrayList<ArrayList<Character>>> parsePDF(String path) {
+        ArrayList<ArrayList<ArrayList<Character>>> answers = new ArrayList<>();
         for (int i = 1; i <= 6; i++) {
-            System.out.println("page " + i + ":");
             DImage page = new DImage(Objects.requireNonNull(PDFHelper.getPageImage(path, i)));
-            ArrayList<ArrayList<Character>> answers = parsePage(page.getBWPixelGrid());
-            int question = 1;
-            for (int col = 0; col < answers.size(); col++) {
-                for (int row = 0; row < answers.get(col).size(); row++) {
-                    System.out.println("question " + question + ": " + answers.get(col).get(row));
-                    question++;
-                }
-            }
-            System.out.println("-------------------------");
+            answers.add(parsePage(page.getBWPixelGrid()));
         }
+        return answers;
     }
 
     public static ArrayList<ArrayList<Character>> parsePage(short[][] page) {
@@ -76,7 +80,7 @@ public class OpticalMarkReaderMain {
                 closestToBlack = average;
             }
         }
-        if (closestToWhite - closestToBlack <= 5) { //this threshold still pops up false positives
+        if (closestToWhite - closestToBlack <= 5) {
             return '0';
         } else {
             return getLetter(number);
@@ -95,6 +99,43 @@ public class OpticalMarkReaderMain {
         } else {
             return 'E';
         }
+    }
+
+    public static ArrayList<Boolean> scoreTest(ArrayList<ArrayList<Character>> answers, ArrayList<ArrayList<Character>> key) {
+        ArrayList<Boolean> results = new ArrayList<>();
+        for (int col = 0; col < answers.size(); col++) {
+            for (int row = 0; row < answers.get(col).size(); row++) {
+                if (answers.get(col).get(row) == key.get(col).get(row)) {
+                    if (key.get(col).get(row) == '0') {
+                        break;
+                    }
+                }
+                results.add(answers.get(col).get(row) == key.get(col).get(row));
+            }
+        }
+        return results;
+    }
+
+    public static String createLine(int page, ArrayList<Boolean> score) {
+        String line = page + ": ";
+        int totalCorrect = 0;
+        for (Boolean correct : score) {
+            if (correct) {
+                totalCorrect++;
+            }
+        }
+        line += totalCorrect + " correct\n   incorrect questions: ";
+        for (int question = 0; question < score.size(); question++) {
+            if (!score.get(question)) {
+                line += (question + 1) + ", ";
+            }
+        }
+        if (line.endsWith(", ")) {
+            line = line.substring(0, line.length() - 2);
+        } else {
+            line += "none";
+        }
+        return line;
     }
 
     public static short[][] crop(short[][] original, int startRow, int startCol, int endRow, int endCol) {
