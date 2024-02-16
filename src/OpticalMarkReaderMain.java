@@ -17,6 +17,15 @@ public class OpticalMarkReaderMain {
         outputAnalysis();
     }
 
+    private static String fileChooser() {
+        String userDirLocation = System.getProperty("user.dir");
+        File userDir = new File(userDirLocation);
+        JFileChooser fc = new JFileChooser(userDir);
+        fc.showOpenDialog(null);
+        File file = fc.getSelectedFile();
+        return file.getAbsolutePath();
+    }
+
     public static void outputResults() {
         try {
             PrintWriter results = new PrintWriter(new FileWriter("results.txt"));
@@ -46,15 +55,6 @@ public class OpticalMarkReaderMain {
         } catch (IOException error) {
             error.printStackTrace();
         }
-    }
-
-    private static String fileChooser() {
-        String userDirLocation = System.getProperty("user.dir");
-        File userDir = new File(userDirLocation);
-        JFileChooser fc = new JFileChooser(userDir);
-        fc.showOpenDialog(null);
-        File file = fc.getSelectedFile();
-        return file.getAbsolutePath();
     }
     
     public static ArrayList<ArrayList<ArrayList<Character>>> parsePDF(String path) {
@@ -153,9 +153,9 @@ public class OpticalMarkReaderMain {
             }
         }
         line.append(totalCorrect).append(" correct\n        incorrect questions: ");
-        for (int question = 0; question < score.size(); question++) {
-            if (!score.get(question)) {
-                line.append(question + 1).append(", ");
+        for (int question = 1; question <= score.size(); question++) {
+            if (!score.get(question - 1)) {
+                line.append(question).append(", ");
             }
         }
         if (line.toString().endsWith(", ")) {
