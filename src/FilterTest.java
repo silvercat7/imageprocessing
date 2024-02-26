@@ -1,5 +1,5 @@
 import FileIO.PDFHelper;
-import filters.CropFilter;
+import filters.Crop;
 import core.DImage;
 import core.DisplayWindow;
 import processing.core.PImage;
@@ -17,7 +17,7 @@ public class FilterTest {
         assert p != null;
         DImage img = new DImage(p);
         System.out.println("running filter on the key...");
-        CropFilter f = new CropFilter();
+        Crop f = new Crop();
         f.processImage(img);
         p = img.getPImage();
         p.save(currentFolder + "assets/key.png");
@@ -32,7 +32,7 @@ public class FilterTest {
         assert pImage != null;
         DImage dImage = new DImage(pImage);
         System.out.println("running filter on test " + (page - 1) + "....");
-        CropFilter filter = new CropFilter();
+        Crop filter = new Crop();
         filter.processImage(dImage);
         pImage = dImage.getPImage();
         pImage.save(currentFolder + "assets/test" + (page - 1) + ".png");

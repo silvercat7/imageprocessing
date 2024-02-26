@@ -3,8 +3,8 @@ package filters;
 import interfaces.PixelFilter;
 import core.DImage;
 
-public class CropFilter implements PixelFilter {
-    public CropFilter() {
+public class Crop implements PixelFilter {
+    public Crop() {
         System.out.println("filter running...");
     }
 

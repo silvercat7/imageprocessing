@@ -5,7 +5,7 @@ import interfaces.PixelFilter;
 import core.DImage;
 import processing.core.PApplet;
 
-public class DrawingFilter implements PixelFilter, Drawable {
+public class Drawing implements PixelFilter, Drawable {
 
     @Override
     public DImage processImage(DImage img) {

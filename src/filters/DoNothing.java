@@ -3,7 +3,7 @@ package filters;
 import interfaces.PixelFilter;
 import core.DImage;
 
-public class DoNothingFilter implements PixelFilter {
+public class DoNothing implements PixelFilter {
 
     @Override
     public DImage processImage(DImage img) {
