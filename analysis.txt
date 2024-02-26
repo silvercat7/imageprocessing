@@ -7,6 +7,6 @@ question 6: 0 incorrect answers
 question 7: 0 incorrect answers
 question 8: 0 incorrect answers
 question 9: 0 incorrect answers
-question 10: 1 incorrect answers
-question 11: 1 incorrect answers
+question 10: 1 incorrect answer
+question 11: 1 incorrect answer
 question 12: 4 incorrect answers

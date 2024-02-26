@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class OpticalMarkReaderMain {
+public class Main {
     private static final ArrayList<ArrayList<ArrayList<Character>>> answers = parsePDF(fileChooser());
     private static final ArrayList<ArrayList<Character>> key = answers.get(0);
 
@@ -43,13 +43,17 @@ public class OpticalMarkReaderMain {
             PrintWriter analysis = new PrintWriter(new FileWriter("analysis.txt"));
             for (int i = 1; i <= scoreTest(answers.get(0), key).size(); i++) {
                 analysis.print("question " + i + ": ");
-                int correct = 0;
+                int incorrect = 0;
                 for (int j = 1; j < answers.size(); j++) {
                     if (!scoreTest(answers.get(j), key).get(i - 1)) {
-                        correct++;
+                        incorrect++;
                     }
                 }
-                analysis.println(correct + " incorrect answers");
+                if (incorrect == 1) {
+                    analysis.println(incorrect + " incorrect answer");
+                } else {
+                    analysis.println(incorrect + " incorrect answers");
+                }
             }
             analysis.close();
         } catch (IOException error) {
